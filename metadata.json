@@ -1,0 +1,6 @@
+{
+  "name": "Rastreio Psicopedagógico AH/SD",
+  "description": "Instrumento digital de rastreio de Altas Habilidades/Superdotação (AH/SD) baseado na Teoria dos Três Anéis de Renzulli.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
