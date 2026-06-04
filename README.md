@@ -436,7 +436,7 @@ Este projeto está licenciado sob a **Licença MIT** - veja [LICENSE](LICENSE) p
 
 **Desenvolvido por**: [Vagner Santos](https://github.com/vagnersantosifpr)
 
-**Instituição**: Universidade Federal do Paraná (IFPR)
+**Instituição**: Instituto Federal do Paraná (IFPR)
 
 **Propósito**: Ferramenta educacional de código aberto para rastreio de superdotação
 
