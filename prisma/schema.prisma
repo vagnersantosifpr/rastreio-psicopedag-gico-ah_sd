@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Remova a linha "url = env(...)" daqui!
+}
+
+// 1. Definição de Status e Papéis
+enum UserRole {
+  PARENT
+  TEACHER
+  STUDENT
+}
+
+enum SessionStatus {
+  PENDING
+  PARTIAL
+  COMPLETED
+}
+
+enum InvitationStatus {
+  PENDING
+  SENT
+  COMPLETED
+}
+
+// 2. Tabelas
+model Professional {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  
+  students  Student[] // Relacionamento
+}
+
+model Student {
+  id             String    @id @default(uuid())
+  professionalId String
+  fullName       String
+  dateOfBirth    DateTime
+  schoolName     String?
+  grade          String?
+  createdAt      DateTime  @default(now())
+
+  professional   Professional @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  sessions       AssessmentSession[]
+}
+
+model AssessmentSession {
+  id        String        @id @default(uuid())
+  studentId String
+  status    SessionStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  student     Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  invitations Invitation[]
+  responses   Response[]
+}
+
+model Invitation {
+  id              String           @id @default(uuid())
+  sessionId       String
+  role            UserRole
+  respondentEmail String
+  respondentName  String?
+  token           String           @unique @default(uuid())
+  status          InvitationStatus @default(PENDING)
+  expiresAt       DateTime
+  createdAt       DateTime         @default(now())
+  completedAt     DateTime?
+
+  session         AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  response        Response?
+}
+
+model Response {
+  id              String   @id @default(uuid())
+  sessionId       String
+  invitationId    String   @unique
+  role            UserRole
+  consentAccepted Boolean  @default(false)
+  answersData     Json     // Aqui entram as notas do Renzulli
+  createdAt       DateTime @default(now())
+
+  session         AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  invitation      Invitation        @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+}
